@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.model.User">
+	<resultMap id="User" type="com.demo.model.User">
+		<id property="user_id" column="user_id" jdbcType="BIGINT" />
+		<result property="user_name" column="user_name" jdbcType="VARCHAR" />
+		<result property="user_password" column="user_password"
+			jdbcType="VARCHAR" />
+		<result property="user_role" column="user_role" jdbcType="BIGINT" />
+		<result property="user_phone" column="user_phone" jdbcType="VARCHAR" />
+		<result property="user_college" column="user_college" jdbcType="VARCHAR" />
+		<result property="user_grade" column="user_grade" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="columns">
+		user_id,user_name,user_password,user_role,user_phone,user_college,user_grade
+	</sql>
+
+	<sql id="TableName">
+		T_USER
+	</sql>
+
+	<select id="list" resultMap="User">
+		SELECT *
+		FROM
+		<include refid="TableName" />
+	</select>
+
+	<update id="edit">
+		UPDATE t_user SET user_id =0 WHERE id = 2;
+	</update>
+
+	<insert id="insert" parameterType="com.demo.model.User">
+		INSERT INTO
+		<include refid="TableName" />
+		(user_id,user_name,user_password,user_role,user_phone,user_college,user_grade)
+		VALUES
+		(
+		#{user_id,jdbcType=BIGINT},
+		#{user_name,jdbcType=VARCHAR},
+		#{user_password,jdbcType=VARCHAR},
+		2,
+		#{user_phone,jdbcType=VARCHAR},
+		#{user_college,jdbcType=VARCHAR},
+		#{user_grade,jdbcType=VARCHAR}
+
+		)
+	</insert>
+
+	<select id="select_password" resultMap="User">
+		SELECT user_password,user_name,user_role
+		FROM
+		<include refid="TableName" />
+		WHERE
+		user_id=#{user_id}
+	</select>
+
+	<select id="select_user" resultMap="User">
+		SELECT *
+		FROM
+		<include refid="TableName" />
+		WHERE
+		user_id = #{info} and user_role = 1;
+	</select>
+
+	<select id="select_user2" resultMap="User">
+		SELECT *
+		FROM
+		<include refid="TableName" />
+		WHERE
+		user_role = 2;
+	</select>
+
+	<select id="select_user2_1" resultMap="User">
+		SELECT *
+		FROM
+		<include refid="TableName" />
+		WHERE
+		user_id = #{info} and user_role = 2;
+	</select>
+
+	<update id="initialize">
+		UPDATE t_user SET user_password = 123456 WHERE
+		user_id = #{user_id};
+	</update>
+
+	<delete id="user_delete" parameterType="int">
+		DELETE
+		FROM
+		<include refid="TableName" />
+		WHERE
+		user_id=#{user_id}
+	</delete>
+
+	<update id="info_update" parameterType="com.demo.model.User">
+		UPDATE t_user SET
+		user_name = #{user_name} ,user_phone = #{user_phone} ,user_college =
+		#{user_college} ,user_grade = #{user_grade}
+		WHERE user_id = #{user_id};
+	</update>
+
+	<update id="password_save" parameterType="com.demo.model.User">
+		UPDATE t_user SET
+		user_password = #{user_password} WHERE user_id = #{user_id};
+	</update>
+
+	<!-- <update id="update" parameterType="com.demo.model.User"> UPDATE <include 
+		refid="TableName"/> SET NAME=#{name,jdbcType=VARCHAR}, GENDER=#{gender,jdbcType=VARCHAR}, 
+		BIRTHDAY=#{birthday} WHERE id=#{id} </update> -->
+</mapper>
+
